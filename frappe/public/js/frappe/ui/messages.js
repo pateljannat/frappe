@@ -195,6 +195,9 @@ frappe.msgprint = function(msg, title, is_minimizable) {
 			data.primary_action.action = () => {
 				if (typeof obj === 'function') {
 					obj(data.primary_action.args);
+					if (data.primary_action.hide_on_success) {
+						frappe.hide_msgprint();
+					}
 				}
 			}
 		}
