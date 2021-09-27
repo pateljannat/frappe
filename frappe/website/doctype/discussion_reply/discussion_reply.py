@@ -21,14 +21,14 @@ class DiscussionReply(Document):
 
 		topic_info = frappe.get_all("Discussion Topic", {"name": self.topic}, ["reference_doctype", "reference_docname", "name", "title", "owner", "creation"])
 		sidebar = frappe.render_template("frappe/templates/discussions/sidebar.html",
-		{
-			"topic": topic_info[0]
-		})
+					{
+						"topic": topic_info[0]
+					})
 
 		new_topic_template = frappe.render_template("frappe/templates/discussions/reply_section.html",
-		{
-			"topics": topic_info
-		})
+								{
+									"topics": topic_info
+								})
 
 		frappe.publish_realtime(event="publish_message",
 								message = {

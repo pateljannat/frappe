@@ -1,3 +1,4 @@
+this.page_length = 5;
 frappe.ready(() => {
 
 	setup_socket_io();
@@ -60,6 +61,18 @@ frappe.ready(() => {
 		back_to_sidebar(e);
 	});
 
+	frappe.socketio.socket.on("publish_message", (data) => {
+		publish_message(data);
+	});
+
+	frappe.socketio.on("load_more_discussions", (data) => {
+		publish_discussions(data);
+	});
+
+	$(".load-more").click((e) => {
+		load_more_discussions(e);
+	});
+
 });
 
 var show_new_topic_modal = (e) => {
@@ -80,9 +93,6 @@ var setup_socket_io = () => {
 			frappe.boot.socketio_port = "9000";
 		}
 		frappe.socketio.init(9000);
-		frappe.socketio.socket.on("publish_message", (data) => {
-			publish_message(data);
-		});
 	});
 };
 
@@ -253,4 +263,21 @@ var back_to_sidebar = () => {
 	$(".discussions-sidebar").removeClass("hide");
 	$("#discussion-group").addClass("hide");
 	$(".discussion-on-page").collapse("hide");
+};
+
+var load_more_discussions = (e) => {
+	frappe.call({
+		"method": "frappe.website.doctype.discussion_topic.discussion_topic.load_more_discussions",
+		"args": {
+			"page_length": this.page_length,
+			"start": $(e.currentTarget).attr("data-start"),
+			"doctype": $(e.currentTarget).closest(".discussions-card").attr("data-doctype"),
+			"docname": $(e.currentTarget).closest(".discussions-card").attr("data-docname")
+		}
+	});
+};
+
+var publish_discussions = (data) => {
+	$(data.sidebar).insertBefore(`.discussions-sidebar .load-more`);
+	$(data.replies).insertAfter(`.discussion-on-page:last`);
 };

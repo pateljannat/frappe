@@ -36,3 +36,32 @@ def get_docname(route):
 		route = frappe.db.get_single_value("Website Settings", "home_page")
 	return frappe.db.get_value("Web Page", {"route": route}, ["name"])
 
+@frappe.whitelist()
+def load_more_discussions(page_length, start, doctype, docname):
+	sidebar = []
+	replies_section = []
+	topics = frappe.get_all("Discussion Topic",
+				{
+					"reference_doctype": doctype,
+					"reference_docname": docname
+				},
+				["name", "title", "owner", "creation"],
+				start=start,
+				page_length=page_length)
+
+	for topic in topics:
+		sidebar.append(frappe.render_template("frappe/templates/discussions/sidebar.html",
+						{
+							"topic": topic
+						}))
+
+		replies_section.append(frappe.render_template("frappe/templates/discussions/reply_section.html",
+								{
+									"topics": topic
+								}))
+
+	frappe.publish_realtime(event="load_more_discussions",
+							message = {
+								"sidebar": sidebar,
+								"replies": replies_section
+							})

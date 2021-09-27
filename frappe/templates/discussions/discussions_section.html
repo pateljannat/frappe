@@ -1,5 +1,6 @@
 {% set topics = frappe.get_all("Discussion Topic",
-{"reference_doctype": doctype, "reference_docname": docname}, ["name", "title", "owner", "creation"]) %}
+{"reference_doctype": doctype, "reference_docname": docname},
+["name", "title", "owner", "creation"], start=0, page_length=5) %}
 
 {% include "frappe/templates/discussions/topic_modal.html" %}
 
@@ -21,6 +22,7 @@
 			{% set replies = frappe.get_all("Discussion Reply", {"topic": topic.name})%}
 			{% include "frappe/templates/discussions/sidebar.html" %}
 			{% endfor %}
+			<div class="button is-secondary load-more" data-start="0">Load More</div>
 		</div>
 
 		<div class="mr-2" id="discussion-group">
