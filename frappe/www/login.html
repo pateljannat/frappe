@@ -81,7 +81,7 @@
 				<div class="page-card-body">
 					<form class="form-signin form-login" role="form">
 						{{ email_login_body() }}
-					</form>	
+					</form>
 					<div class="social-logins text-center">
 						<p class="text-muted login-divider">{{ _("or") }}</p>
 						<div class="social-login-buttons">
@@ -143,6 +143,9 @@
 						<input type="email" id="signup_email" class="form-control"
 							placeholder="{{ _('jane@example.com') }}" required>
 					</div>
+					{% if additional_signup_fields %}
+						{{ additional_signup_fields }}
+					{% endif %}
 				</div>
 				<div class="page-card-actions">
 					<button class="btn btn-sm btn-primary btn-block btn-signup"

@@ -74,6 +74,8 @@ def get_context(context):
 
 	context['login_label'] = ' {0} '.format(_('or')).join(login_label)
 
+	context.additional_signup_fields = frappe.get_hooks("additional_signup_fields")
+
 	return context
 
 @frappe.whitelist(allow_guest=True)
