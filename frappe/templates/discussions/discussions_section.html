@@ -1,7 +1,11 @@
 {% set topics = frappe.get_all("Discussion Topic",
 {"reference_doctype": doctype, "reference_docname": docname}, ["name", "title", "owner", "creation"]) %}
 
+{{ docname }}
+
 {% include "frappe/templates/discussions/topic_modal.html" %}
+
+{{ topics }}
 
 <div class="discussions-parent">
 	<div class="discussions-header">
@@ -45,8 +49,7 @@
 			{% endif %}
 		</div>
 	</div>
-</div>
-{% endif %}
+	{% endif %}
 </div>
 
 {% block script %}
