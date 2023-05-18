@@ -6,7 +6,6 @@ class TelemetryManager {
 
 		this.project_id = frappe.boot.posthog_project_id;
 		this.telemetry_host = frappe.boot.posthog_host;
-
 		if (cint(frappe.boot.enable_telemetry) && this.project_id && this.telemetry_host) {
 			this.enabled = true;
 		}
@@ -31,7 +30,11 @@ class TelemetryManager {
 	}
 
 	capture(event, app) {
+		console.log(event, app)
+		console.log(this.enabled)
+		console.log(posthog)
 		if (!this.enabled) return;
+		console.log(frappe.boot.enable_telemetry)
 		posthog.capture(`${app}_${event}`);
 	}
 
